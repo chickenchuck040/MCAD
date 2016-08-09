@@ -87,7 +87,7 @@ module ellipse(width, height) {
   scale([1, height/width, 1]) circle(r=width/2);
 }
 
-// The ratio of lenght and width is about 1.39 for a real egg
+// The ratio of length and width is about 1.39 for a real egg
 module egg_outline(width, length){
     translate([0, width/2, 0]) union(){
         rotate([0, 0, 180]) difference(){
@@ -235,12 +235,15 @@ module square_pyramid(base_x, base_y,height)
   polyhedron(points=[[-w,-h,0],[-w,h,0],[w,h,0],[w,-h,0],[0,0,height]],triangles=[[0,3,2,1], [0,1,4], [1,2,4], [2,3,4], [3,0,4]]);
 }
 
-module egg(width, lenght){
-    rotate_extrude()
-        difference(){
-            egg_outline(width, lenght);
-            translate([-lenght, 0, 0]) cube(2*lenght, center=true);
-        }
+module egg(width, length)
+{
+  rotate_extrude(){
+    difference(){
+      egg_outline(width, length);
+      // Cut off half of egg so all x corrdinates are positive for rotate_extrude()
+      translate([-width/2-1, 0]) square([width/2+1, max(length, width)+2]); // egg_outline(...) makes a circle of radius width if width > length.
+    }
+  }
 }
 
 // Tests:
